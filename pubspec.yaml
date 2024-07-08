@@ -38,6 +38,7 @@ dependencies:
   geolocator: ^12.0.0
   google_maps_flutter: ^2.7.0
   permission_handler: ^11.3.1
+  sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:
   flutter_lints: ^3.0.0
