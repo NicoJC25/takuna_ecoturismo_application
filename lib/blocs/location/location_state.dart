@@ -1,16 +1,30 @@
 part of 'location_bloc.dart';
 
 class LocationState extends Equatable {
+  final bool followingUser;
+  final bool followingRoute;
   final LatLng? startRouteLocation;
+  final LatLng? lastUserLocation;
 
-  const LocationState({this.startRouteLocation});
+  const LocationState(
+      {this.followingUser = false,
+      this.followingRoute = false,
+      this.startRouteLocation,
+      this.lastUserLocation});
 
   LocationState copyWith({
+    bool? followingUser,
+    bool? followingRoute,
     LatLng? startRouteLocation,
+    LatLng? lastUserLocation,
   }) =>
       LocationState(
-          startRouteLocation: startRouteLocation ?? this.startRouteLocation);
+          followingUser: followingUser ?? this.followingUser,
+          followingRoute: followingRoute ?? this.followingRoute,
+          startRouteLocation: startRouteLocation ?? this.startRouteLocation,
+          lastUserLocation: lastUserLocation ?? this.lastUserLocation);
 
   @override
-  List<Object?> get props => [startRouteLocation];
+  List<Object?> get props =>
+      [followingUser, lastUserLocation, startRouteLocation];
 }

@@ -8,11 +8,21 @@ sealed class LocationEvent extends Equatable {
 }
 
 class OnNewRouteLocationEvent extends LocationEvent {
-  final LatLng newLocation;
+  final LatLng newRouteLocation;
 
-  const OnNewRouteLocationEvent(this.newLocation);
+  const OnNewRouteLocationEvent(this.newRouteLocation);
+}
+
+class OnNewUserLocationEvent extends LocationEvent {
+  final LatLng newUserLocation;
+
+  const OnNewUserLocationEvent(this.newUserLocation);
 }
 
 class OnStartFollowingRoute extends LocationEvent {}
 
-class OnEndFollowingRoute extends LocationEvent {}
+class OnStopFollowingRoute extends LocationEvent {}
+
+class OnStartFollowingUser extends LocationEvent {}
+
+class OnStopFollowingUser extends LocationEvent {}

@@ -17,7 +17,7 @@ class MapView extends StatelessWidget {
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
     final CameraPosition initialCameraPosition =
-        CameraPosition(target: initialLocation, zoom: 5);
+        CameraPosition(target: initialLocation, zoom: 15);
 
     final size = MediaQuery.of(context).size;
 
