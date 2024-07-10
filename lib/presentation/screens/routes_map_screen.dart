@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
+import 'package:takuna_ecoturismo_application/presentation/widgets/btn_clear_routes.dart';
 import 'package:takuna_ecoturismo_application/presentation/widgets/widgets.dart';
 import 'package:takuna_ecoturismo_application/views/views.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import 'package:google_fonts/google_fonts.dart';
 
 class RoutesMapScreen extends StatefulWidget {
   const RoutesMapScreen({super.key});
@@ -13,7 +17,10 @@ class RoutesMapScreen extends StatefulWidget {
 }
 
 class _RoutesMapScreenState extends State<RoutesMapScreen> {
+  late MapBloc mapBloc;
   late LocationBloc locationBloc;
+  final PanelController _panelController = PanelController();
+  bool _isPanelOpen = false;
 
   @override
   void initState() {
@@ -25,39 +32,279 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, locationState) {
-          if (locationState.lastUserLocation == null) {
-            return const Center(child: Text('Espera por favor, Senderista...'));
-          }
+    return SlidingUpPanel(
+      color: Colors.white70,
+      controller: _panelController,
+      onPanelSlide: (position) {
+        setState(() {
+          _isPanelOpen = position > 0.3;
+        });
+      },
+      collapsed: Icon(
+        Icons.drag_handle,
+        color: Colors.grey[600],
+        size: 45,
+      ),
+      panel: _buildPanel(),
+      body: Scaffold(
+        body: BlocBuilder<LocationBloc, LocationState>(
+          builder: (context, locationState) {
+            if (locationState.lastUserLocation == null) {
+              return const Center(
+                  child: Text('Espera por favor, Senderista...'));
+            }
 
-          return BlocBuilder<MapBloc, MapState>(
-            builder: (context, mapState) {
-              Set<Polyline> polylines = mapState.polylines;
+            return BlocBuilder<MapBloc, MapState>(
+              builder: (context, mapState) {
+                Set<Polyline> polylines = mapState.polylines;
+                Set<Marker> markers = mapState.markers;
 
-              return SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    MapView(
+                return SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      MapView(
                         initialLocation: locationState.lastUserLocation!,
-                        polylines: polylines),
-                  ],
+                        polylines: polylines,
+                        markers: markers,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: const Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            BtnRoutes(),
+            BtnClearRoutes(),
+            BtnFollowUser(),
+            BtnLocation(),
+          ],
+        ),
+      ),
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(24.0),
+        topRight: Radius.circular(24.0),
+      ),
+    );
+  }
+
+  Widget _buildPanel() {
+    return BlocBuilder<MapBloc, MapState>(
+      builder: (context, mapState) {
+        mapBloc = BlocProvider.of<MapBloc>(context);
+        if (mapState.polylines.isNotEmpty) {
+          //RUTA 1
+          if (mapBloc.state.selectedRoute ==
+              'Sendero La Patria Corozal Ascenso') {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 80, right: 40),
+                    child: const Text(
+                      """Ruta 1: Sendero La Patria Corozal Ascenso""",
+                      style:
+                          TextStyle(fontSize: 20, fontFamily: 'RadioATreqer'),
+                    ),
+                  ),
                 ),
-              );
-            },
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                    child: Text(
+                      'Descripcion de la ruta',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }
+          //RUTA 2
+          else if (mapBloc.state.selectedRoute ==
+              'Sendero La Patria Corozal Descenso') {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 80, right: 40),
+                    child: const Text(
+                      """Ruta 2: Sendero La Patria Corozal Descenso""",
+                      style:
+                          TextStyle(fontSize: 20, fontFamily: 'RadioATreqer'),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                    child: Text(
+                      'Descripcion de la ruta',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }
+          //RUTA 3
+          else if (mapBloc.state.selectedRoute == 'Sendero cancha San Julian') {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 80, right: 40),
+                    child: const Text(
+                      """Ruta 3: Sendero cancha San Julian""",
+                      style:
+                          TextStyle(fontSize: 20, fontFamily: 'RadioATreqer'),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                    child: Text(
+                      'Descripcion de la ruta',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }
+          //RUTA 4
+          else if (mapBloc.state.selectedRoute == 'Sendero Cruz de Dozule') {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 80, right: 40),
+                    child: const Text(
+                      """Ruta 4: Sendero Cruz de Dozule""",
+                      style:
+                          TextStyle(fontSize: 20, fontFamily: 'RadioATreqer'),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                    child: Text(
+                      'Descripcion de la ruta',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }
+          //RUTA 5
+          else if (mapBloc.state.selectedRoute ==
+              'Sendero Farrallones El Jardin') {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 80, right: 40),
+                    child: const Text(
+                      """Ruta 5: Sendero Farrallones El Jardin""",
+                      style:
+                          TextStyle(fontSize: 20, fontFamily: 'RadioATreqer'),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                    child: Text(
+                      'Descripcion de la ruta',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }
+          //RUTA 6
+          else if (mapBloc.state.selectedRoute == 'Sendero Mateguada') {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 80, right: 40),
+                    child: const Text(
+                      """Ruta 6: Sendero Mateguada""",
+                      style:
+                          TextStyle(fontSize: 20, fontFamily: 'RadioATreqer'),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _isPanelOpen,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                    child: Text(
+                      'Descripcion de la ruta',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                    ),
+                  ),
+                )
+              ],
+            );
+          }
+        } else {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 40, right: 40),
+                  child: const Text(
+                    'Elige una ruta para ver su descripción',
+                    style:
+                        TextStyle(fontSize: 24.0, fontFamily: 'RadioATreqer'),
+                  ),
+                ),
+              ],
+            ),
           );
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: const Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          BtnRoutes(),
-          BtnFollowUser(),
-          BtnLocation(),
-        ],
-      ),
+        }
+        return _buildPanel();
+      },
     );
   }
 }

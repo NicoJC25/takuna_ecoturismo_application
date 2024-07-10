@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
+import 'package:takuna_ecoturismo_application/config/helpers/widgets_to_markers.dart';
 
 part 'map_event.dart';
 part 'map_state.dart';
@@ -28,8 +29,22 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     //on<UpdateUserPolylineEvent>(_onPolylineUserNewPoint);
 
-    on<DisplayPolylinesEvent>(
-        (event, emit) => emit(state.copyWith(polylines: event.polylines)));
+    on<OnRouteSelectedEvent>((event, emit) =>
+        emit(state.copyWith(selectedRoute: event.selectedRoute)));
+
+    on<SelectedMinutesMarkerEvent>((event, emit) {
+      final newState =
+          state.copyWith(minutesSelectedRoute: event.minutesSelectedRoute);
+      emit(newState);
+    });
+    on<SelectedKilometersEvent>((event, emit) {
+      final newState = state.copyWith(
+          kilometersSelectedRoute: event.kilometersSelectedRoute);
+      emit(newState);
+    });
+
+    on<DisplayPolylinesEvent>((event, emit) => emit(
+        state.copyWith(polylines: event.polylines, markers: event.markers)));
     on<OnStartFollowingRouteEvent>(_onStartFollowingRoute);
 
     locationStateSubscription = locationBloc.stream.listen((locationState) {
@@ -71,7 +86,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }*/
 
   void clearPolylines() {
-    add(const DisplayPolylinesEvent({}));
+    add(const DisplayPolylinesEvent({}, {}));
   }
 
   void _onStartFollowingRoute(
@@ -84,6 +99,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   Future loadRouteFromGeoJson(String filePath) async {
     final Set<Polyline> polylines = {};
+    final Set<Marker> markers = {};
 
     String geoJsonString = await rootBundle.loadString(filePath);
     Map<String, dynamic> geoJson = jsonDecode(geoJsonString);
@@ -100,6 +116,34 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     }
 
+    if (state.selectedRoute == 'Sendero La Patria Corozal Ascenso') {
+      add(const SelectedMinutesMarkerEvent('154'));
+      add(const SelectedKilometersEvent('5'));
+    } else if (state.selectedRoute == 'Sendero La Patria Corozal Descenso') {
+      add(const SelectedMinutesMarkerEvent('104'));
+      add(const SelectedKilometersEvent('4.3'));
+    } else if (state.selectedRoute == 'Sendero cancha San Julia') {
+      add(const SelectedMinutesMarkerEvent('113'));
+      add(const SelectedKilometersEvent('4.6'));
+    } else if (state.selectedRoute == 'Sendero Cruz de Dozule') {
+      add(const SelectedMinutesMarkerEvent('260'));
+      add(const SelectedKilometersEvent('7.8'));
+    } else if (state.selectedRoute == 'Sendero Farrallones El Jardin') {
+      add(const SelectedMinutesMarkerEvent('70'));
+      add(const SelectedKilometersEvent('2.8'));
+    } else if (state.selectedRoute == 'Sendero Mateguada') {
+      add(const SelectedMinutesMarkerEvent('94'));
+      add(const SelectedKilometersEvent('2.8'));
+    }
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    final customStartMarker =
+        await getStartCustomMarker(state.minutesSelectedRoute);
+
+    final customEndMarker =
+        await getEndCustomMarker(state.kilometersSelectedRoute);
+
     polylines.add(Polyline(
       polylineId: PolylineId(filePath),
       width: 5,
@@ -109,11 +153,27 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       points: routeCoordinates,
     ));
 
-    add(DisplayPolylinesEvent(polylines));
+    markers.add(Marker(
+        anchor: const Offset(0.5, 0.9),
+        markerId: MarkerId('routeStart_$filePath'),
+        position: routeCoordinates.first,
+        icon: customStartMarker));
+
+    markers.add(Marker(
+        anchor: const Offset(0.1, 0.5),
+        markerId: MarkerId('routeEnd_$filePath'),
+        position: routeCoordinates.last,
+        icon: customEndMarker));
+
+    add(DisplayPolylinesEvent(polylines, markers));
     moveCamera(LatLng(polylines.first.points.first.latitude,
         polylines.first.points.first.longitude));
 
     return features;
+  }
+
+  void getRouteName(String selectedRoute) {
+    add(OnRouteSelectedEvent(selectedRoute));
   }
 
   void moveCamera(LatLng newLocation) {

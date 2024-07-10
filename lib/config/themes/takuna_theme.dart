@@ -1,27 +1,72 @@
 const takunaMapTheme = [
   {
-    "featureType": "landscape.natural",
-    "elementType": "geometry.fill",
+    "featureType": "administrative",
+    "elementType": "labels",
     "stylers": [
-      {"visibility": "on"},
-      {"color": "#e0efef"}
+      {"visibility": "off"}
     ]
   },
   {
-    "featureType": "poi",
-    "elementType": "geometry.fill",
+    "featureType": "landscape",
+    "elementType": "all",
     "stylers": [
-      {"visibility": "on"},
-      {"hue": "#1900ff"},
-      {"color": "#c0e8e8"}
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "poi.attraction",
+    "elementType": "labels",
+    "stylers": [
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "elementType": "all",
+    "stylers": [
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "elementType": "labels",
+    "stylers": [
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "elementType": "labels.icon",
+    "stylers": [
+      {"visibility": "off"}
+    ]
+  },
+  {
+    "featureType": "poi.government",
+    "elementType": "labels",
+    "stylers": [
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "elementType": "all",
+    "stylers": [
+      {"visibility": "on"}
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "elementType": "labels",
+    "stylers": [
+      {"visibility": "off"}
     ]
   },
   {
     "featureType": "road",
-    "elementType": "geometry",
+    "elementType": "all",
     "stylers": [
-      {"lightness": 100},
-      {"visibility": "simplified"}
+      {"visibility": "on"}
     ]
   },
   {
@@ -29,21 +74,6 @@ const takunaMapTheme = [
     "elementType": "labels",
     "stylers": [
       {"visibility": "off"}
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry",
-    "stylers": [
-      {"visibility": "on"},
-      {"lightness": 700}
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "all",
-    "stylers": [
-      {"color": "#7dcdcd"}
     ]
   }
 ];

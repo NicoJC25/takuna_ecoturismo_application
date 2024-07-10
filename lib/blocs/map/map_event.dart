@@ -27,7 +27,23 @@ class UpdateUserPolylineEvent extends MapEvent {
 
 class OnToggleUserRoute extends MapEvent {}
 
+class OnRouteSelectedEvent extends MapEvent {
+  final String selectedRoute;
+  const OnRouteSelectedEvent(this.selectedRoute);
+}
+
+class SelectedMinutesMarkerEvent extends MapEvent {
+  final String minutesSelectedRoute;
+  const SelectedMinutesMarkerEvent(this.minutesSelectedRoute);
+}
+
+class SelectedKilometersEvent extends MapEvent {
+  final String kilometersSelectedRoute;
+  const SelectedKilometersEvent(this.kilometersSelectedRoute);
+}
+
 class DisplayPolylinesEvent extends MapEvent {
   final Set<Polyline> polylines;
-  const DisplayPolylinesEvent(this.polylines);
+  final Set<Marker> markers;
+  const DisplayPolylinesEvent(this.polylines, this.markers);
 }
