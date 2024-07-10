@@ -12,7 +12,7 @@ class BtnFollowUser extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white70,
         maxRadius: 25,
         child: BlocBuilder<MapBloc, MapState>(
           builder: (context, state) {
@@ -21,7 +21,7 @@ class BtnFollowUser extends StatelessWidget {
                     state.isFollowingUser
                         ? Icons.directions_run_rounded
                         : Icons.hail_rounded,
-                    color: Colors.black),
+                    color: Colors.grey),
                 onPressed: () {
                   mapBloc.add(OnStartFollowingUserEvent());
                 });

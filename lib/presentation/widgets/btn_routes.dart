@@ -7,15 +7,21 @@ class BtnRoutes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late String selectedRoute;
+
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: CircleAvatar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white70,
         maxRadius: 25,
-        child: ElevatedButton(
+        child: IconButton(
+          icon: const Icon(
+            Icons.map_sharp,
+            color: Colors.grey,
+          ),
           onPressed: () {
             //Navigator.push(context,
             //MaterialPageRoute(builder: (context) => const RoutesScreen()));
@@ -35,6 +41,8 @@ class BtnRoutes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      selectedRoute = 'Sendero La Patria Corozal Ascenso';
+                      mapBloc.getRouteName(selectedRoute);
                       mapBloc.clearPolylines();
                       searchBloc.getPlacesByGJson(
                           'assets/Sendero base Takuna - La_patria_Corozal Ascenso.geojson');
@@ -52,6 +60,8 @@ class BtnRoutes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      selectedRoute = 'Sendero La Patria Corozal Descenso';
+                      mapBloc.getRouteName(selectedRoute);
                       mapBloc.clearPolylines();
                       searchBloc.getPlacesByGJson(
                           'assets/Sendero La patria corozal - Takuna Base _Descenso.geojson');
@@ -69,6 +79,8 @@ class BtnRoutes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      selectedRoute = 'Sendero cancha San Julian';
+                      mapBloc.getRouteName(selectedRoute);
                       mapBloc.clearPolylines();
                       searchBloc.getPlacesByGJson(
                           'assets/Sendero Cancha San_Julian - Takuna Base.geojson');
@@ -86,6 +98,8 @@ class BtnRoutes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      selectedRoute = 'Sendero Cruz de Dozule';
+                      mapBloc.getRouteName(selectedRoute);
                       mapBloc.clearPolylines();
                       searchBloc.getPlacesByGJson(
                           'assets/Sendero Circuito Takuna base _Cruz de Dozule.geojson');
@@ -103,6 +117,8 @@ class BtnRoutes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      selectedRoute = 'Sendero Farrallones El Jardin';
+                      mapBloc.getRouteName(selectedRoute);
                       mapBloc.clearPolylines();
                       searchBloc.getPlacesByGJson(
                           'assets/Takuna_Sendero_Farrallones-El_jardin-Takuna-Base.geojson');
@@ -120,6 +136,8 @@ class BtnRoutes extends StatelessWidget {
                       ],
                     ),
                     onTap: () {
+                      selectedRoute = 'Sendero Mateguada';
+                      mapBloc.getRouteName(selectedRoute);
                       mapBloc.clearPolylines();
                       searchBloc.getPlacesByGJson(
                           'assets/Sendero Takuna Base _Mateguadua.geojson');
@@ -127,10 +145,6 @@ class BtnRoutes extends StatelessWidget {
                   ),
                 ]);
           },
-          child: const Icon(
-            Icons.map_sharp,
-            color: Colors.black,
-          ),
         ),
       ),
     );

@@ -9,9 +9,12 @@ class SearchState extends Equatable {
 
   SearchState copyWith({
     List<dynamic>? places,
+    String? selectedRoute,
   }) =>
       SearchState(places: places ?? this.places);
 
   @override
-  List<Object> get props => [places];
+  List<Object> get props => [
+        places,
+      ];
 }
