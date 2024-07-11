@@ -9,30 +9,40 @@ class BtnLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late double marginBottom;
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 100),
-      child: CircleAvatar(
-        backgroundColor: Colors.white70,
-        maxRadius: 25,
-        child: IconButton(
-          icon: const Icon(
-            Icons.my_location_outlined,
-            color: Colors.grey,
-          ),
-          onPressed: () {
-            final userLocation = locationBloc.state.lastUserLocation;
-            if (userLocation == null) {
-              final snack = CustomSnackbar(message: 'No hay ubicacion');
-              ScaffoldMessenger.of(context).showSnackBar(snack);
-              return;
-            }
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth > 600) {
+          marginBottom = 60;
+        } else {
+          marginBottom = 100;
+        }
+        return Container(
+          margin: EdgeInsets.only(bottom: marginBottom),
+          child: CircleAvatar(
+            backgroundColor: Colors.white70,
+            maxRadius: 25,
+            child: IconButton(
+              icon: const Icon(
+                Icons.my_location_outlined,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                final userLocation = locationBloc.state.lastUserLocation;
+                if (userLocation == null) {
+                  final snack = CustomSnackbar(message: 'No hay ubicacion');
+                  ScaffoldMessenger.of(context).showSnackBar(snack);
+                  return;
+                }
 
-            mapBloc.moveCamera(userLocation);
-          },
-        ),
-      ),
+                mapBloc.moveCamera(userLocation);
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

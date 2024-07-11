@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
 import 'package:takuna_ecoturismo_application/presentation/screens/screens.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
@@ -21,6 +22,10 @@ class TakunaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Color.fromARGB(255, 153, 204, 51),
+      systemNavigationBarColor: Colors.transparent,
+    ));
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Takuna Application',

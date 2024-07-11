@@ -122,7 +122,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } else if (state.selectedRoute == 'Sendero La Patria Corozal Descenso') {
       add(const SelectedMinutesMarkerEvent('104'));
       add(const SelectedKilometersEvent('4.3'));
-    } else if (state.selectedRoute == 'Sendero cancha San Julia') {
+    } else if (state.selectedRoute == 'Sendero cancha San Julian') {
       add(const SelectedMinutesMarkerEvent('113'));
       add(const SelectedKilometersEvent('4.6'));
     } else if (state.selectedRoute == 'Sendero Cruz de Dozule') {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
 
 class GpsAccesScreen extends StatelessWidget {
@@ -29,7 +30,16 @@ class _AccesButton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('¡Es necesario acceso al GPS, Senderista!'),
+        Center(
+          child: Text(
+            """¡Es necesario acceso a la ubicacion, Senderista!""",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: GoogleFonts.redHatDisplay().fontFamily,
+                fontWeight: FontWeight.bold,
+                fontSize: 25),
+          ),
+        ),
         MaterialButton(
           color: Colors.black,
           shape: const StadiumBorder(),
@@ -53,10 +63,14 @@ class _EnableGpsMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Text(
         '¡Debes habilitar el GPS, Senderista!',
-        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            fontFamily: GoogleFonts.redHatDisplay().fontFamily),
       ),
     );
   }
