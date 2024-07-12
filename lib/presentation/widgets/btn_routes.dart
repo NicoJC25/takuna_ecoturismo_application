@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
 import 'package:takuna_ecoturismo_application/presentation/screens/screens.dart';
 
+//Boton que lleva a la interfaz de rutas
 class BtnRoutes extends StatelessWidget {
   const BtnRoutes({super.key});
 
@@ -27,6 +28,7 @@ class BtnRoutes extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => const RouteSelectionScreen()),
             );
+            //Retorna los datos necesarios para crear la polyline de la ruta
             if (selectedRoute != null) {
               switch (selectedRoute) {
                 //RUTA 1

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
 import 'package:takuna_ecoturismo_application/presentation/screens/screens.dart';
 
+//Pantalla de validacion permisos gps
 class LoadingRoutesScreen extends StatelessWidget {
   const LoadingRoutesScreen({super.key});
 

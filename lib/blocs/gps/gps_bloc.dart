@@ -11,6 +11,7 @@ part 'gps_state.dart';
 class GpsBloc extends Bloc<GpsEvent, GpsState> {
   StreamSubscription? gpsServiceSubscription;
 
+  //Declaracion del bloc y que retornará cada evento
   GpsBloc()
       : super(const GpsState(
             isGpsEnabled: false, isGpsPermissionGranted: false)) {
@@ -21,6 +22,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     _init();
   }
 
+  //Envío de valores de los permisos, se envía al ejecutar el programa
   Future<void> _init() async {
     final gpsInitStatus = await Future.wait([
       _checkGpsStatus(),
@@ -32,11 +34,13 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
         isGpsPermissionGranted: gpsInitStatus[1]));
   }
 
+  //Validar si el permiso fue validado
   Future<bool> _isPermissionGranted() async {
     final isGranted = await Permission.location.isGranted;
     return isGranted;
   }
 
+  //Validar si el gps esta prendido
   Future<bool> _checkGpsStatus() async {
     final isEnable = await Geolocator.isLocationServiceEnabled();
 
@@ -51,6 +55,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     return isEnable;
   }
 
+  //Logica al momento de pedir permiso de ubicacion
   Future<void> askGpsAccess() async {
     final status = await Permission.location.request();
 
@@ -71,6 +76,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     }
   }
 
+  //Cerrar el flujo
   @override
   Future<void> close() {
     gpsServiceSubscription?.cancel();

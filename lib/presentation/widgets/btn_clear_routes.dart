@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/blocs.dart';
 import '../../ui/ui.dart';
 
+//Boton que limpia las rutas si hay
 class BtnClearRoutes extends StatelessWidget {
   const BtnClearRoutes({super.key});
 
@@ -23,6 +24,7 @@ class BtnClearRoutes extends StatelessWidget {
           onPressed: () {
             if (mapBloc.state.polylines.isNotEmpty) {
               mapBloc.clearPolylines();
+              //Mensaje si no hay ruta
             } else {
               final snack =
                   CustomSnackbar(message: 'No se ha seleccionado ninguna ruta');

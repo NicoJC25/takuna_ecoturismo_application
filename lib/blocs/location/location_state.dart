@@ -1,5 +1,6 @@
 part of 'location_bloc.dart';
 
+//Declaracion de variables necesarias para localizacion
 class LocationState extends Equatable {
   final bool followingUser;
   final bool followingRoute;
@@ -12,6 +13,7 @@ class LocationState extends Equatable {
       this.startRouteLocation,
       this.lastUserLocation});
 
+  //Copia de las variables
   LocationState copyWith({
     bool? followingUser,
     bool? followingRoute,

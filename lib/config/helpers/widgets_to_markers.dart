@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:takuna_ecoturismo_application/presentation/markers/markers.dart';
 
+//Convertidor del marcador de inicio de widget a marcador
 Future<BitmapDescriptor> getStartCustomMarker(String minutes) async {
   final recoder = ui.PictureRecorder();
   final canvas = ui.Canvas(recoder);
@@ -17,6 +18,7 @@ Future<BitmapDescriptor> getStartCustomMarker(String minutes) async {
   return BitmapDescriptor.bytes(byteData!.buffer.asUint8List());
 }
 
+//Convertidor del marcador final de widget a marcador
 Future<BitmapDescriptor> getEndCustomMarker(String kilometers) async {
   final recoder = ui.PictureRecorder();
   final canvas = ui.Canvas(recoder);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//Snackbar customizado
 class CustomSnackbar extends SnackBar {
   CustomSnackbar(
       {super.key,

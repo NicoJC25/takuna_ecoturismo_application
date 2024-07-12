@@ -1,6 +1,6 @@
-//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+//Pantalla para testear
 class WidgetsTestScreen extends StatelessWidget {
   const WidgetsTestScreen({super.key});
 

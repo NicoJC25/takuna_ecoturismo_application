@@ -1,3 +1,4 @@
+//Parte visual del mapa personalizada
 const takunaMapTheme = [
   {
     "featureType": "administrative",

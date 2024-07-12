@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/blocs.dart';
 import '../../ui/ui.dart';
 
+//Boton que localiza al usuario una unica vez
 class BtnLocation extends StatelessWidget {
   const BtnLocation({super.key});
 

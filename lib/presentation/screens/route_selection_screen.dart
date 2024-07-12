@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+//Pantalla de seleccion de rutas
 class RouteSelectionScreen extends StatelessWidget {
   const RouteSelectionScreen({super.key});
 
@@ -9,6 +10,7 @@ class RouteSelectionScreen extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         late double sizedBoxHeight;
+        //Validacion responsiva
         if (constraints.maxWidth > 600) {
           sizedBoxHeight = 30;
         } else {
@@ -57,6 +59,7 @@ class RouteSelectionScreen extends StatelessWidget {
                   ),
                   LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
+                    //Si la pantalla esta horizontal
                     if (constraints.maxWidth > 600) {
                       return SingleChildScrollView(
                           child: Column(
@@ -198,6 +201,7 @@ class RouteSelectionScreen extends StatelessWidget {
                           )
                         ],
                       ));
+                      //Si la pantalla esta vertical
                     } else {
                       return SingleChildScrollView(
                         child: Column(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:takuna_ecoturismo_application/presentation/screens/loading_routes_screen.dart';
 
+//Pantalla para testear
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

@@ -7,6 +7,7 @@ sealed class SearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
+//Evento al seleccionar ruta
 class OnRoutesEvent extends SearchEvent {
   final List<dynamic> places;
   const OnRoutesEvent(this.places);

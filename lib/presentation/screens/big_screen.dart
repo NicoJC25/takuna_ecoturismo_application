@@ -1,3 +1,4 @@
+//Pantalla de prueba
 import 'package:flutter/material.dart';
 
 class BigScreen extends StatelessWidget {

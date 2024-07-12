@@ -4,7 +4,10 @@ import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
 import 'package:takuna_ecoturismo_application/presentation/screens/screens.dart';
 import 'package:flutter/services.dart';
 
+//Archivo main
 void main() {
+  //Declaracion de un multiblocprovider que contendrá los demas, declaracion
+  //necesaria para que funcionen estos
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (context) => GpsBloc()),
     BlocProvider(create: (context) => LocationBloc()),
@@ -22,6 +25,7 @@ class TakunaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Configuracion de la status bar y la navigation bar
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromARGB(255, 153, 204, 51),
       systemNavigationBarColor: Colors.transparent,
@@ -29,7 +33,7 @@ class TakunaApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Takuna Application',
-      home: LoadingRoutesScreen(),
+      home: LoadingRoutesScreen(), //Llamado de la primera pantalla del programa
     );
   }
 }

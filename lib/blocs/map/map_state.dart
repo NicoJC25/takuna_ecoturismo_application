@@ -1,5 +1,6 @@
 part of 'map_bloc.dart';
 
+//Definicion de variables necesarias para el mapa
 class MapState extends Equatable {
   final bool isMapInitialized;
   final bool isFollowingRoute;
@@ -25,6 +26,7 @@ class MapState extends Equatable {
   })  : polylines = polylines ?? const {},
         markers = markers ?? const {};
 
+  //Copia de las variables
   MapState copyWith({
     bool? isMapInitialized,
     bool? isFollowingRoute,

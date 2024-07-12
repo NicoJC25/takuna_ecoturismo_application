@@ -20,14 +20,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   StreamSubscription<LocationState>? locationStateSubscription;
 
+  //Definicion del bloc y logica de eventos
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     on<OnMapInitializedEvent>(_onInitMap);
 
     on<OnStartFollowingUserEvent>(_onStartFollowingUser);
     on<OnStopFollowingUserEvent>(
         (event, emit) => emit(state.copyWith(isFollowingUser: false)));
-
-    //on<UpdateUserPolylineEvent>(_onPolylineUserNewPoint);
 
     on<OnRouteSelectedEvent>((event, emit) =>
         emit(state.copyWith(selectedRoute: event.selectedRoute)));
@@ -47,20 +46,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         state.copyWith(polylines: event.polylines, markers: event.markers)));
     on<OnStartFollowingRouteEvent>(_onStartFollowingRoute);
 
+    //Configuracion adicional
     locationStateSubscription = locationBloc.stream.listen((locationState) {
       if (!state.isFollowingUser) return;
       if (locationState.lastUserLocation == null) return;
-
-      //moveCamera(locationState.lastUserLocation!);
     });
   }
 
+  //Al iniciar el mapa
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
     _mapController = event.controller;
 
     emit(state.copyWith(isMapInitialized: true));
   }
 
+  //Al seguir a un usuario
   void _onStartFollowingUser(
       OnStartFollowingUserEvent event, Emitter<MapState> emit) {
     emit(state.copyWith(isFollowingUser: true));
@@ -69,26 +69,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     moveCamera(locationBloc.state.lastUserLocation!);
   }
 
-  /*void _onPolylineUserNewPoint(
-      UpdateUserPolylineEvent event, Emitter<MapState> emit) {
-    final myRoute = Polyline(
-        polylineId: const PolylineId('myRoute'),
-        color: Colors.black,
-        width: 5,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap,
-        points: event.userLocation);
-
-    final currentPolylines = Map<String, Polyline>.from(state.polylines);
-    currentPolylines['myRoute'] = myRoute;
-
-    emit(state.copyWith(polylines: currentPolylines));
-    }*/
-
+  //Limipiar polylines
   void clearPolylines() {
     add(const DisplayPolylinesEvent({}, {}));
   }
 
+  //Al llamar una ruta
   void _onStartFollowingRoute(
       OnStartFollowingRouteEvent event, Emitter<MapState> emit) {
     emit(state.copyWith(isFollowingRoute: true));
@@ -97,6 +83,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     moveCamera(locationBloc.state.startRouteLocation!);
   }
 
+  //Cargar las polylines de forma local
   Future loadRouteFromGeoJson(String filePath) async {
     final Set<Polyline> polylines = {};
     final Set<Marker> markers = {};
@@ -116,6 +103,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       }
     }
 
+    //Envío de variables dependiendo de la ruta
     if (state.selectedRoute == 'Sendero La Patria Corozal Ascenso') {
       add(const SelectedMinutesMarkerEvent('154'));
       add(const SelectedKilometersEvent('5'));
@@ -144,6 +132,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final customEndMarker =
         await getEndCustomMarker(state.kilometersSelectedRoute);
 
+    //Polyline de cada ruta
     polylines.add(Polyline(
       polylineId: PolylineId(filePath),
       width: 5,
@@ -153,6 +142,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       points: routeCoordinates,
     ));
 
+    //Markers de cada ruta
     markers.add(Marker(
         anchor: const Offset(0.5, 0.9),
         markerId: MarkerId('routeStart_$filePath'),
@@ -172,15 +162,18 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     return features;
   }
 
+  //Obtener el nombre de cada ruta
   void getRouteName(String selectedRoute) {
     add(OnRouteSelectedEvent(selectedRoute));
   }
 
+  //Mover la camara del mapa
   void moveCamera(LatLng newLocation) {
     final cameraUpdate = CameraUpdate.newLatLng(newLocation);
     _mapController?.animateCamera(cameraUpdate);
   }
 
+  //Cerrar el flujo
   @override
   Future<void> close() {
     locationStateSubscription?.cancel();

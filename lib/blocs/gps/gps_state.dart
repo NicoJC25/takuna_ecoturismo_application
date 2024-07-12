@@ -1,5 +1,6 @@
 part of 'gps_bloc.dart';
 
+//Definicion de variables necesarias para acceso GPS
 class GpsState extends Equatable {
   final bool isGpsEnabled;
   final bool isGpsPermissionGranted;
@@ -8,7 +9,7 @@ class GpsState extends Equatable {
 
   const GpsState(
       {required this.isGpsEnabled, required this.isGpsPermissionGranted});
-
+  //Copia de las variables
   GpsState copyWith(
           {bool? isGpsEnabled, bool? isGpsPermissionGranted}) =>
       GpsState(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:takuna_ecoturismo_application/blocs/blocs.dart';
 
+//Pantalla acceso gps y ubicacion
 class GpsAccesScreen extends StatelessWidget {
   const GpsAccesScreen({super.key});
 
@@ -22,6 +23,7 @@ class GpsAccesScreen extends StatelessWidget {
   }
 }
 
+//Boton de acceso gps
 class _AccesButton extends StatelessWidget {
   const _AccesButton();
 
@@ -58,6 +60,7 @@ class _AccesButton extends StatelessWidget {
   }
 }
 
+//Mensaje de encender gps
 class _EnableGpsMessage extends StatelessWidget {
   const _EnableGpsMessage();
 

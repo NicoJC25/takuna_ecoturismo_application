@@ -12,6 +12,7 @@ part 'location_state.dart';
 class LocationBloc extends Bloc<LocationEvent, LocationState> {
   StreamSubscription<Position>? positionStream;
 
+  //Definicion del bloc y procesos que hará cada evento
   LocationBloc() : super(const LocationState()) {
     on<OnStartFollowingUser>(
         (event, emit) => emit(state.copyWith(followingUser: true)));
@@ -19,8 +20,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         (event, emit) => emit(state.copyWith(followingUser: false)));
     on<OnStartFollowingRoute>(
         (event, emit) => emit(state.copyWith(followingRoute: true)));
-    on<OnStopFollowingRoute>(
-        (event, emit) => emit(state.copyWith(followingRoute: false)));
 
     on<OnNewRouteLocationEvent>((event, emit) {
       emit(state.copyWith(startRouteLocation: event.newRouteLocation));
@@ -31,16 +30,13 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     });
   }
 
+  //Obtener la posicion de comienzo de la ruta
   Future getRoutePosition(final Set<Polyline> polylines) async {
     final position = polylines.first;
     add(OnNewRouteLocationEvent(position.points.first));
   }
 
-  Future getCurrentPosition() async {
-    final position = await Geolocator.getCurrentPosition();
-    add(OnNewUserLocationEvent(LatLng(position.latitude, position.longitude)));
-  }
-
+  //Logica cuando se empiece a seguir al usuario
   void startFollowingUser() {
     add(OnStartFollowingUser());
 
@@ -51,11 +47,13 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     });
   }
 
+  //Logica cuando se deje de seguir al usuario
   void stopFollowingUser() {
     positionStream?.cancel();
     add(OnStopFollowingUser());
   }
 
+  //Cierra el flujo
   @override
   Future<void> close() {
     stopFollowingUser();

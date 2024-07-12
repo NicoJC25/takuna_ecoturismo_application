@@ -6,9 +6,9 @@ import 'package:takuna_ecoturismo_application/presentation/widgets/btn_big_scree
 import 'package:takuna_ecoturismo_application/presentation/widgets/widgets.dart';
 import 'package:takuna_ecoturismo_application/views/views.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 
+//Pantalla del mapa como tal
 class RoutesMapScreen extends StatefulWidget {
   const RoutesMapScreen({super.key});
 
@@ -21,22 +21,32 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
   late LocationBloc locationBloc;
   final PanelController _panelController = PanelController();
   bool _isPanelOpen = false;
+  bool _isMapMinimized = false;
+  CameraPosition? _lastCameraPosition;
 
   @override
   void initState() {
     super.initState();
-
     locationBloc = BlocProvider.of<LocationBloc>(context);
     locationBloc.startFollowingUser();
+  }
+
+  void _toggleMapSize() {
+    setState(() {
+      _isMapMinimized = !_isMapMinimized;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      //Definicion del panel deslizante inferior
       body: SlidingUpPanel(
         color: Colors.white70,
-        minHeight: 70,
+        minHeight: _isMapMinimized
+            ? 0
+            : 70, // Ocultar el panel si el mapa está minimizado
         controller: _panelController,
         onPanelSlide: (position) {
           setState(() {
@@ -46,15 +56,20 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
         collapsed: Icon(
           Icons.drag_handle,
           color: Colors.grey[600],
-          size: 45,
+          size: _isMapMinimized
+              ? 0
+              : 45, // Ocultar el icono si el mapa está minimizado
         ),
-        panel: _buildPanel(),
+        panel: _isMapMinimized
+            ? Container()
+            : _buildPanel(), // Ocultar el panel si el mapa está minimizado
         body: Scaffold(
           body: BlocBuilder<LocationBloc, LocationState>(
             builder: (context, locationState) {
               if (locationState.lastUserLocation == null) {
                 return const Center(
-                    child: Text('Espera por favor, Senderista...'));
+                  child: Text('Espera por favor, Senderista...'),
+                );
               }
 
               return BlocBuilder<MapBloc, MapState>(
@@ -62,33 +77,50 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
                   Set<Polyline> polylines = mapState.polylines;
                   Set<Marker> markers = mapState.markers;
 
-                  return SingleChildScrollView(
-                    child: Stack(
-                      children: [
-                        MapView(
-                          initialLocation: locationState.lastUserLocation!,
+                  return Stack(
+                    children: [
+                      _isMapMinimized
+                          //TODO: Poner la pantalla de las aves
+                          ? const BigScreen()
+                          : MapView(
+                              initialLocation: locationState.lastUserLocation!,
+                              polylines: polylines,
+                              markers: markers,
+                              onCameraMove: (position) {
+                                _lastCameraPosition = position;
+                              },
+                            ),
+                      //Muestra de la interfaz minimizada
+                      if (_isMapMinimized)
+                        DraggableSmallMapView(
+                          initialLocation: _lastCameraPosition?.target ??
+                              locationState.lastUserLocation!,
                           polylines: polylines,
                           markers: markers,
+                          onTap: _toggleMapSize,
                         ),
-                      ],
-                    ),
+                    ],
                   );
                 },
               );
             },
           ),
+          //Botones de la parte inferior derecha
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-          floatingActionButton: const Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              BtnBigScreen(),
-              BtnRoutes(),
-              BtnClearRoutes(),
-              BtnFollowUser(),
-              BtnLocation(),
-            ],
-          ),
+          floatingActionButton: _isMapMinimized
+              ? null
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    BtnBigScreen(onTap: _toggleMapSize),
+                    const BtnRoutes(),
+                    const BtnClearRoutes(),
+                    const BtnFollowUser(),
+                    const BtnLocation(),
+                  ],
+                ),
         ),
+        //Border radius del SlidingUpPanel
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
@@ -97,14 +129,12 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
     );
   }
 
-  //CONFIGURACION DEL CONTENIDO DEL SLIDE UP
-
+  //Configuracion del contenido del panel
   Widget _buildPanel() {
     return BlocBuilder<MapBloc, MapState>(
       builder: (context, mapState) {
         mapBloc = BlocProvider.of<MapBloc>(context);
         if (mapState.polylines.isNotEmpty) {
-          //RUTA 1
           if (mapBloc.state.selectedRoute ==
               'Sendero La Patria Corozal Ascenso') {
             return _ColumnSlideUpContentWidget(
@@ -112,43 +142,34 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
               title: """Ruta 1: Sendero La Patria Corozal Ascenso""",
               description: 'Descripcion de la ruta',
             );
-          }
-          //RUTA 2
-          else if (mapBloc.state.selectedRoute ==
+          } else if (mapBloc.state.selectedRoute ==
               'Sendero La Patria Corozal Descenso') {
             return _ColumnSlideUpContentWidget(
               isPanelOpen: _isPanelOpen,
               title: """Ruta 2: Sendero La Patria Corozal Descenso""",
               description: 'Descripcion de la ruta',
             );
-          }
-          //RUTA 3
-          else if (mapBloc.state.selectedRoute == 'Sendero cancha San Julian') {
+          } else if (mapBloc.state.selectedRoute ==
+              'Sendero cancha San Julian') {
             return _ColumnSlideUpContentWidget(
               isPanelOpen: _isPanelOpen,
               title: """Ruta 3: Sendero Cancha San Julian""",
               description: 'Descripcion de la ruta',
             );
-          }
-          //RUTA 4
-          else if (mapBloc.state.selectedRoute == 'Sendero Cruz de Dozule') {
+          } else if (mapBloc.state.selectedRoute == 'Sendero Cruz de Dozule') {
             return _ColumnSlideUpContentWidget(
               isPanelOpen: _isPanelOpen,
               title: """Ruta 4: Sendero Cruz de Dozule""",
               description: 'Descripcion de la ruta',
             );
-          }
-          //RUTA 5
-          else if (mapBloc.state.selectedRoute ==
+          } else if (mapBloc.state.selectedRoute ==
               'Sendero Farrallones El Jardin') {
             return _ColumnSlideUpContentWidget(
               isPanelOpen: _isPanelOpen,
               title: """Ruta 5: Sendero Farrallones El Jardin""",
               description: 'Descripcion de la ruta',
             );
-          }
-          //RUTA 6
-          else if (mapBloc.state.selectedRoute == 'Sendero Mateguada') {
+          } else if (mapBloc.state.selectedRoute == 'Sendero Mateguada') {
             return _ColumnSlideUpContentWidget(
               isPanelOpen: _isPanelOpen,
               title: """Ruta 6: Sendero Mateguada""",
@@ -178,8 +199,7 @@ class _RoutesMapScreenState extends State<RoutesMapScreen> {
   }
 }
 
-//CONFIGURACION VISUAL PARA EL INTERIOR DEL SLIDE UP
-
+//Configuracion de la parte visual del contenido del panel
 class _ColumnSlideUpContentWidget extends StatelessWidget {
   final String title;
   final String description;
@@ -214,11 +234,12 @@ class _ColumnSlideUpContentWidget extends StatelessWidget {
             child: Text(
               description,
               style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: GoogleFonts.redHatDisplay().fontFamily),
+                fontSize: 20,
+                fontFamily: GoogleFonts.redHatDisplay().fontFamily,
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
